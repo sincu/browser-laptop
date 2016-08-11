@@ -39,6 +39,7 @@ const ContextMenu = require('./contextMenu')
 const PopupWindow = require('./popupWindow')
 const NoScriptInfo = require('./noScriptInfo')
 const LongPressButton = require('./longPressButton')
+const WindowActionBar = require('./windowActionBar')
 
 // Constants
 const config = require('../constants/config')
@@ -584,11 +585,7 @@ class Main extends ImmutableComponent {
     if (!e.target.className.includes('navigatorWrapper')) {
       return
     }
-    if (currentWindow.isMaximized()) {
-      currentWindow.maximize()
-    } else {
-      currentWindow.unmaximize()
-    }
+    return (!currentWindow.isMaximized()) ? currentWindow.maximize() : currentWindow.unmaximize()
   }
 
   onMouseDown (e) {
@@ -895,6 +892,7 @@ class Main extends ImmutableComponent {
                 braveShieldsDown: !braverySettings.shieldsUp
               })}
               onClick={this.onBraveMenu} />
+              {process.platform === 'darwin' ? null : <WindowActionBar windowMaximized={this.props.windowState.getIn(['ui', 'isMaximized'])} />}
           </div>
         </div>
         <UpdateBar updates={this.props.appState.get('updates')} />
