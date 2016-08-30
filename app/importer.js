@@ -14,3 +14,7 @@ exports.init = () => {
 exports.importData = (options) => {
   importer.importData(options)
 }
+
+importer.on('updateSupportedBrowsers', (e, detail) => {
+  console.log(detail)
+})
