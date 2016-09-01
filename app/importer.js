@@ -17,24 +17,28 @@ exports.importData = (options) => {
 
 importer.on('update-supported-browsers', (e, detail) => {
   console.log(detail)
+  // index, history, favorites, passwords, search engines, homepage, autofilldata
   // firefox dev test
-  importer.importData(['1', 'true', 'true', 'true', 'true', 'false', 'true'])
+  // importer.importData(['1', 'true', 'true', 'true', 'true', 'false', 'true'])
+  // safari dev test
+  importer.importData(['0', 'false', 'true', 'false', 'false', 'false', 'false'])
 })
 
 importer.on('add-password-form', (e, detail) => {
   console.log(detail)
 })
 
-importer.on('add-history-page', (e, detail) => {
-  console.log(detail)
+importer.on('add-history-page', (e, histories) => {
+  console.log(histories)
 })
 
 importer.on('add-homepage', (e, detail) => {
   console.log(detail)
 })
 
-importer.on('add-bookmarks', (e, detail) => {
-  console.log(detail)
+importer.on('add-bookmarks', (e, bookmarks, topLevelFolder) => {
+  console.log(bookmarks)
+  console.log(topLevelFolder)
 })
 
 importer.on('add-favicons', (e, detail) => {
