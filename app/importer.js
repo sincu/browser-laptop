@@ -15,6 +15,36 @@ exports.importData = (options) => {
   importer.importData(options)
 }
 
-importer.on('updateSupportedBrowsers', (e, detail) => {
+importer.on('update-supported-browsers', (e, detail) => {
+  console.log(detail)
+  // firefox dev test
+  importer.importData(['1', 'true', 'true', 'true', 'true', 'false', 'true'])
+})
+
+importer.on('add-password-form', (e, detail) => {
+  console.log(detail)
+})
+
+importer.on('add-history-page', (e, detail) => {
+  console.log(detail)
+})
+
+importer.on('add-homepage', (e, detail) => {
+  console.log(detail)
+})
+
+importer.on('add-bookmarks', (e, detail) => {
+  console.log(detail)
+})
+
+importer.on('add-favicons', (e, detail) => {
+  console.log(detail)
+})
+
+importer.on('add-keywords', (e, detail) => {
+  console.log(detail)
+})
+
+importer.on('add-autofill-form-data-entries', (e, detail) => {
   console.log(detail)
 })
