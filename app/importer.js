@@ -21,15 +21,16 @@ importer.on('update-supported-browsers', (e, detail) => {
   // firefox dev test
   // importer.importData(['1', 'true', 'true', 'true', 'true', 'false', 'true'])
   // safari dev test
-  importer.importData(['0', 'false', 'true', 'false', 'false', 'false', 'false'])
+  // importer.importData(['0', 'false', 'true', 'false', 'false', 'false', 'false'])
 })
 
 importer.on('add-password-form', (e, detail) => {
   console.log(detail)
 })
 
-importer.on('add-history-page', (e, histories) => {
+importer.on('add-history-page', (e, histories, visitSource) => {
   console.log(histories)
+  console.log(visitSource)
 })
 
 importer.on('add-homepage', (e, detail) => {
@@ -45,8 +46,9 @@ importer.on('add-favicons', (e, detail) => {
   console.log(detail)
 })
 
-importer.on('add-keywords', (e, detail) => {
-  console.log(detail)
+importer.on('add-keywords', (e, templateUrls, uniqueOnHostAndPath) => {
+  console.log(templateUrls)
+  console.log(uniqueOnHostAndPath)
 })
 
 importer.on('add-autofill-form-data-entries', (e, detail) => {
