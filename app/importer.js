@@ -22,6 +22,8 @@ importer.on('update-supported-browsers', (e, detail) => {
   // importer.importData(['1', 'true', 'true', 'true', 'true', 'false', 'true'])
   // safari dev test
   // importer.importData(['0', 'false', 'true', 'false', 'false', 'false', 'false'])
+  // chrome dev test
+  // importer.importData(['2', 'true', 'true', 'false', 'false', 'false', 'false'])
 })
 
 importer.on('add-password-form', (e, detail) => {
