@@ -38,9 +38,17 @@ importer.on('add-password-form', (e, detail) => {
   console.log(detail)
 })
 
-importer.on('add-history-page', (e, histories, visitSource) => {
-  console.log(histories)
-  console.log(visitSource)
+importer.on('add-history-page', (e, history, visitSource) => {
+  let sites = []
+  for (let i = 0; i < history.length; ++i) {
+    const site = {
+      title: history[i].title,
+      location: history[i].url,
+      lastAccessedTime: history[i].last_visit * 1000
+    }
+    sites.push(site)
+  }
+  appActions.addSite(Immutable.fromJS(sites))
 })
 
 importer.on('add-homepage', (e, detail) => {
@@ -88,7 +96,7 @@ importer.on('add-bookmarks', (e, bookmarks, topLevelFolder) => {
         title: bookmarks[i].title,
         folderId: folderId,
         parentFolderId: parentFolderId,
-        lastAccessedTime: bookmarks[i].creation_time,
+        lastAccessedTime: bookmarks[i].creation_time * 1000,
         tags: [siteTags.BOOKMARK_FOLDER]
       }
       sites.push(folder)
@@ -97,7 +105,7 @@ importer.on('add-bookmarks', (e, bookmarks, topLevelFolder) => {
         title: bookmarks[i].title,
         location: bookmarks[i].url,
         parentFolderId: parentFolderId,
-        lastAccessedTime: bookmarks[i].creation_time,
+        lastAccessedTime: bookmarks[i].creation_time * 1000,
         tags: [siteTags.BOOKMARK]
       }
       sites.push(site)
