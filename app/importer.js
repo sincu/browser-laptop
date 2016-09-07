@@ -6,6 +6,11 @@
 
 const electron = require('electron')
 const importer = electron.importer
+const Immutable = require('immutable')
+const siteUtil = require('../js/state/siteUtil')
+const AppStore = require('../js/stores/appStore')
+const siteTags = require('../js/constants/siteTags')
+const appActions = require('../js/actions/appActions')
 
 exports.init = () => {
   importer.initialize()
@@ -43,8 +48,62 @@ importer.on('add-homepage', (e, detail) => {
 })
 
 importer.on('add-bookmarks', (e, bookmarks, topLevelFolder) => {
-  console.log(bookmarks)
-  console.log(topLevelFolder)
+  let nextFolderId = siteUtil.getNextFolderId(AppStore.getState().get('sites'))
+  let pathMap = {}
+  let sites = []
+  const topLevelFolderId = nextFolderId++
+  sites.push({
+    title: topLevelFolder,
+    folderId: topLevelFolderId,
+    parentFolderId: -1,
+    lastAccessedTime: (new Date()).getTime(),
+    tags: [siteTags.BOOKMARK_FOLDER]
+  })
+  pathMap[topLevelFolder] = topLevelFolderId
+  for (let i = 0; i < bookmarks.length; ++i) {
+    const pathLen = bookmarks[i].path.length
+    let parentFolderId = -1
+    if (!pathLen) {
+      parentFolderId = topLevelFolderId
+    } else {
+      const parentFolder = bookmarks[i].path[pathLen - 1]
+      parentFolderId = pathMap[parentFolder]
+      if (parentFolderId === undefined) {
+        parentFolderId = nextFolderId++
+        pathMap[parentFolder] = parentFolderId
+        const folder = {
+          title: parentFolder,
+          folderId: parentFolderId,
+          parentFolderId: pathMap[bookmarks[i].path[pathLen - 2]],
+          lastAccessedTime: (new Date()).getTime(),
+          tags: [siteTags.BOOKMARK_FOLDER]
+        }
+        sites.push(folder)
+      }
+    }
+    if (bookmarks[i].is_folder) {
+      const folderId = nextFolderId++
+      pathMap[bookmarks[i].title] = folderId
+      const folder = {
+        title: bookmarks[i].title,
+        folderId: folderId,
+        parentFolderId: parentFolderId,
+        lastAccessedTime: bookmarks[i].creation_time,
+        tags: [siteTags.BOOKMARK_FOLDER]
+      }
+      sites.push(folder)
+    } else {
+      const site = {
+        title: bookmarks[i].title,
+        location: bookmarks[i].url,
+        parentFolderId: parentFolderId,
+        lastAccessedTime: bookmarks[i].creation_time,
+        tags: [siteTags.BOOKMARK]
+      }
+      sites.push(site)
+    }
+  }
+  appActions.addSite(Immutable.fromJS(sites))
 })
 
 importer.on('add-favicons', (e, detail) => {
