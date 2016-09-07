@@ -26,6 +26,9 @@ importer.on('update-supported-browsers', (e, detail) => {
   // importer.importData(['2', 'true', 'true', 'false', 'false', 'false', 'false'])
 })
 
+importer.on('show-warning-dialog', (e) => {
+})
+
 importer.on('add-password-form', (e, detail) => {
   console.log(detail)
 })
