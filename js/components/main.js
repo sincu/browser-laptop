@@ -24,6 +24,7 @@ const FindBar = require('./findbar.js')
 const UpdateBar = require('./updateBar')
 const NotificationBar = require('./notificationBar')
 const DownloadsBar = require('./downloadsBar')
+const Menubar = require('../../app/renderer/components/menubar')
 const Button = require('./button')
 const BrowserActionButton = require('../../app/renderer/components/browserActionButton')
 const SiteInfo = require('./siteInfo')
@@ -116,6 +117,11 @@ class Main extends ImmutableComponent {
         case keyCodes.NUMPAD_MINUS:
           if (eventUtil.isForSecondaryAction(e)) {
             ipc.emit(messages.SHORTCUT_ACTIVE_FRAME_ZOOM_OUT)
+          }
+          break
+        case keyCodes.ALT:
+          if (isWindows) {
+            windowActions.toggleMenubarVisible()
           }
           break
       }
@@ -741,6 +747,10 @@ class Main extends ImmutableComponent {
     const braverySettings = siteSettings.activeSettings(activeSiteSettings, this.props.appState, appConfig)
     const loginRequiredDetail = activeFrame ? basicAuthState.getLoginRequiredDetail(this.props.appState, activeFrame.get('tabId')) : null
 
+    const menubarEnabled = isWindows
+    const menubarVisible = menubarEnabled && this.props.windowState.getIn(['ui', 'menubar', 'isVisible'])
+    const menubarTemplate = menubarVisible ? this.props.appState.getIn(['menu', 'template']) : null
+
     const shouldAllowWindowDrag = !this.props.windowState.get('contextMenuDetail') &&
       !this.props.windowState.get('bookmarkDetail') &&
       !siteInfoIsVisible &&
@@ -773,6 +783,14 @@ class Main extends ImmutableComponent {
         : null
       }
       <div className='top'>
+        {
+          menubarVisible
+            ? <div className='titlebar'>
+                <Menubar template={menubarTemplate} />
+                <WindowCaptionButtons windowMaximized={this.props.windowState.getIn(['ui', 'isMaximized'])} />
+              </div>
+            : null
+        }
         <div className='navigatorWrapper'
           onDoubleClick={this.onDoubleClick}
           onDragOver={this.onDragOver}
@@ -894,7 +912,11 @@ class Main extends ImmutableComponent {
               })}
               onClick={this.onBraveMenu} />
           </div>
-          { isWindows ? <WindowCaptionButtons windowMaximized={this.props.windowState.getIn(['ui', 'isMaximized'])} /> : null }
+          {
+            menubarEnabled && !menubarVisible
+              ? <WindowCaptionButtons windowMaximized={this.props.windowState.getIn(['ui', 'isMaximized'])} />
+              : null
+          }
         </div>
         <UpdateBar updates={this.props.appState.get('updates')} />
         {

@@ -674,6 +674,8 @@ const handleAppAction = (action) => {
       break
     case ExtensionConstants.EXTENSION_DISABLED:
       appState = extensionState.extensionDisabled(appState, action)
+    case AppConstants.APP_SET_MENUBAR_TEMPLATE:
+      appState = appState.setIn(['menu', 'template'], action.menubarTemplate)
       break
     default:
   }

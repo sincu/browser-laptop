@@ -29,8 +29,10 @@
                  - (@navbarBraveButtonWidth + 2 * @navbarButtonSpacing);
 }
 
-// Window Caption Buttons
+// Window Caption Buttons (for use w/ slim titlebar)
 .windowCaptionButtons {
+  display: inline-block;
+  float: right;
   -webkit-user-select: none;
   -webkit-app-region: drag;
   height: 100%;
@@ -385,6 +387,8 @@
 // box on its left has different size than the one on the right.
 // This is achieved by the local variable `@centerOffset`.
 .navigatorWrapper {
+  clear:both;
+
   // Since we want to keep the navigator centered, we need to calculate the
   // difference between the width of the left box and the width of the right box.
   @centerOffset: 2 * (@navbarButtonWidth + @navbarButtonSpacing) // width area on the left

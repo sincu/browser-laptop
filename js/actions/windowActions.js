@@ -985,6 +985,30 @@ const windowActions = {
       frameProps,
       source
     })
+  },
+
+
+  /**
+   * (Windows only)
+   * Dispatches a message to indicate the custom rendered Menubar should be toggled (shown/hidden)
+   */
+  toggleMenubarVisible: function () {
+    dispatch({
+      actionType: WindowConstants.WINDOW_TOGGLE_MENUBAR_VISIBLE
+    })
+  },
+
+  /**
+   * (Windows only)
+   * Used to trigger the click() action for a menu
+   * Called from the Menubar control, handled in menu.js
+   * @param {string} itemLabel - text of the label that was clicked
+   */
+  clickMenubarItem: function (label) {
+    dispatch({
+      actionType: WindowConstants.WINDOW_CLICK_MENUBAR_ITEM,
+      label
+    })
   }
 }
 

@@ -464,6 +464,13 @@ const appActions = {
       actionType: AppConstants.APP_WINDOW_BLURRED,
       appWindowId: appWindowId
     })
+  },
+
+  setMenubarTemplate: function (menubarTemplate) {
+    AppDispatcher.dispatch({
+      actionType: AppConstants.APP_SET_MENUBAR_TEMPLATE,
+      menubarTemplate
+    })
   }
 }
 
