@@ -28,12 +28,10 @@ class MenubarItem extends ImmutableComponent {
         if (submenuItem.type === separatorMenuItem.type) {
           return submenuItem
         }
-        return {
-          label: submenuItem.label,
-          click: function (e) {
-            windowActions.clickMenubarItem(submenuItem.label)
-          }
+        submenuItem.click = function (e) {
+          windowActions.clickMenubarItem(submenuItem.label)
         }
+        return submenuItem
       })
     }))
   }
