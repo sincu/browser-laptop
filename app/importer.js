@@ -11,6 +11,7 @@ const siteUtil = require('../js/state/siteUtil')
 const AppStore = require('../js/stores/appStore')
 const siteTags = require('../js/constants/siteTags')
 const appActions = require('../js/actions/appActions')
+const Filtering = require('./filtering')
 
 exports.init = () => {
   importer.initialize()
@@ -22,13 +23,13 @@ exports.importData = (options) => {
 
 importer.on('update-supported-browsers', (e, detail) => {
   console.log(detail)
-  // index, history, favorites, passwords, search engines, homepage, autofilldata
+  // index, history, favorites, passwords, search engines, homepage, autofilldata, cookies
   // firefox dev test
-  // importer.importData(['1', 'true', 'true', 'true', 'true', 'false', 'true'])
+  // importer.importData(['1', 'true', 'true', 'true', 'true', 'false', 'true', 'false'])
   // safari dev test
-  // importer.importData(['0', 'false', 'true', 'false', 'false', 'false', 'false'])
+  // importer.importData(['0', 'false', 'true', 'false', 'false', 'false', 'false', 'false'])
   // chrome dev test
-  // importer.importData(['2', 'true', 'true', 'false', 'false', 'false', 'false'])
+  // importer.importData(['2', 'true', 'true', 'false', 'false', 'false', 'false', 'true'])
 })
 
 importer.on('show-warning-dialog', (e) => {
@@ -125,4 +126,20 @@ importer.on('add-keywords', (e, templateUrls, uniqueOnHostAndPath) => {
 
 importer.on('add-autofill-form-data-entries', (e, detail) => {
   console.log(detail)
+})
+
+importer.on('add-cookies', (e, cookies) => {
+  for (let i = 0; i < cookies.length; ++i) {
+    const cookie = {
+      url: cookies[i].url,
+      name: cookies[i].name,
+      value: cookies[i].value,
+      domain: cookies[i].domain,
+      path: cookies[i].path,
+      secure: cookies[i].secure,
+      httpOnly: cookies[i].httponly,
+      expirationDate: cookies[i].expiry_date
+    }
+    Filtering.setCookie(cookie)
+  }
 })

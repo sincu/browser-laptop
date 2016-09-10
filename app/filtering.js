@@ -669,3 +669,14 @@ module.exports.clearAutofillData = () => {
     ses.autofill.clearAutofillData()
   }
 }
+
+module.exports.setCookie = (cookie) => {
+  for (let partition in registeredSessions) {
+    let ses = registeredSessions[partition]
+    ses.cookies.set(cookie, (error) => {
+      if (error) {
+        console.error(error)
+      }
+    })
+  }
+}
