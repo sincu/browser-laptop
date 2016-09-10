@@ -748,7 +748,7 @@ class Main extends ImmutableComponent {
     const loginRequiredDetail = activeFrame ? basicAuthState.getLoginRequiredDetail(this.props.appState, activeFrame.get('tabId')) : null
 
     const menubarEnabled = isWindows
-    const menubarVisible = menubarEnabled && this.props.windowState.getIn(['ui', 'menubar', 'isVisible'])
+    const menubarVisible = menubarEnabled && (!getSetting(settings.AUTO_HIDE_MENU) || this.props.windowState.getIn(['ui', 'menubar', 'isVisible']))
     const menubarTemplate = menubarVisible ? this.props.appState.getIn(['menu', 'template']) : null
 
     const shouldAllowWindowDrag = !this.props.windowState.get('contextMenuDetail') &&
