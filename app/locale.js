@@ -203,7 +203,12 @@ var rendererIdentifiers = function () {
     'downloadItemDelete',
     'downloadItemClear',
     'downloadToolbarHide',
-    'downloadItemClearCompleted'
+    'downloadItemClearCompleted',
+    // Caption buttons in titlebar (min/max/close - Windows only)
+    'windowCaptionButtonMinimize',
+    'windowCaptionButtonMaximize',
+    'windowCaptionButtonRestore',
+    'windowCaptionButtonClose'
   ]
 }
 
