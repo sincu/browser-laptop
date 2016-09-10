@@ -19,7 +19,6 @@ class MenubarItem extends ImmutableComponent {
       e.stopPropagation()
     }
 
-    const parentLabel = this.props.label
     const rect = e.target.getBoundingClientRect()
     windowActions.setContextMenuDetail(Immutable.fromJS({
       left: rect.left,

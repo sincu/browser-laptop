@@ -786,9 +786,9 @@ class Main extends ImmutableComponent {
         {
           menubarVisible
             ? <div className='titlebar'>
-                <Menubar template={menubarTemplate} />
-                <WindowCaptionButtons windowMaximized={this.props.windowState.getIn(['ui', 'isMaximized'])} />
-              </div>
+              <Menubar template={menubarTemplate} />
+              <WindowCaptionButtons windowMaximized={this.props.windowState.getIn(['ui', 'isMaximized'])} />
+            </div>
             : null
         }
         <div className='navigatorWrapper'

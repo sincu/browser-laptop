@@ -987,7 +987,6 @@ const windowActions = {
     })
   },
 
-
   /**
    * (Windows only)
    * Dispatches a message to indicate the custom rendered Menubar should be toggled (shown/hidden)
