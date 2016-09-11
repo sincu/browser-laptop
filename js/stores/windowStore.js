@@ -775,8 +775,12 @@ const doAction = (action) => {
       break
     case WindowConstants.WINDOW_TOGGLE_MENUBAR_VISIBLE:
       if (getSetting(settings.AUTO_HIDE_MENU)) {
-        const currentStatus = windowState.getIn(['ui', 'menubar', 'isVisible'])
-        windowState = windowState.setIn(['ui', 'menubar', 'isVisible'], !currentStatus)
+        if (typeof action.isVisible === 'boolean'){
+          windowState = windowState.setIn(['ui', 'menubar', 'isVisible'], action.isVisible)
+        } else {
+          const currentStatus = windowState.getIn(['ui', 'menubar', 'isVisible'])
+          windowState = windowState.setIn(['ui', 'menubar', 'isVisible'], !currentStatus)
+        }
       }
       break
 

@@ -990,10 +990,12 @@ const windowActions = {
   /**
    * (Windows only)
    * Dispatches a message to indicate the custom rendered Menubar should be toggled (shown/hidden)
+   * @param {boolean} isVisible (optional)
    */
-  toggleMenubarVisible: function () {
+  toggleMenubarVisible: function (isVisible) {
     dispatch({
-      actionType: WindowConstants.WINDOW_TOGGLE_MENUBAR_VISIBLE
+      actionType: WindowConstants.WINDOW_TOGGLE_MENUBAR_VISIBLE,
+      isVisible
     })
   },
 
