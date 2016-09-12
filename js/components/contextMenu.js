@@ -213,7 +213,7 @@ class ContextMenuSingle extends ImmutableComponent {
  */
 class ContextMenu extends ImmutableComponent {
   onClick () {
-    windowActions.setContextMenuDetail()
+    windowActions.resetMenuState()
   }
   get openedSubmenuDetails () {
     return this.props.contextMenuDetail.get('openedSubmenuDetails') || new Immutable.List()

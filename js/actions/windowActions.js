@@ -1003,12 +1003,37 @@ const windowActions = {
    * (Windows only)
    * Used to trigger the click() action for a menu
    * Called from the Menubar control, handled in menu.js
-   * @param {string} itemLabel - text of the label that was clicked
+   * @param {string} label - text of the label that was clicked
    */
-  clickMenubarItem: function (label) {
+  clickMenubarSubmenu: function (label) {
     dispatch({
-      actionType: WindowConstants.WINDOW_CLICK_MENUBAR_ITEM,
+      actionType: WindowConstants.WINDOW_CLICK_MENUBAR_SUBMENU,
       label
+    })
+  },
+
+  /**
+   * (Windows only)
+   * Used to track which menubar item is currently selected (or null for none selected)
+   * @param {string} label - text of the menubar item label that was clicked (file, edit, etc)
+   */
+  setMenubarItemSelected: function (label) {
+    dispatch({
+      actionType: WindowConstants.WINDOW_SET_MENUBAR_ITEM_SELECTED,
+      label
+    })
+  },
+
+  /**
+   * Used by main.js when click happens on content area (not on a link or react control).
+   * - closes context menu
+   * - closes popup menu
+   * - nulls out menubar item selected (Windows only)
+   * - hides menubar if auto-hide preference is set (Windows only)
+   */
+  resetMenuState: function () {
+    dispatch({
+      actionType: WindowConstants.WINDOW_RESET_MENU_STATE
     })
   }
 }

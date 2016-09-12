@@ -20,13 +20,14 @@ class MenubarItem extends ImmutableComponent {
       e.stopPropagation()
     }
     // If clicking on an already selected item, deselect it
-    const selected = this.props.menubar.state.selectedLabel
+    const selected = this.props.menubar.props.selectedLabel
     if (selected && selected === this.props.label) {
-      this.props.menubar.setState({selectedLabel: null})
+      windowActions.setContextMenuDetail()
+      windowActions.setMenubarItemSelected()
       return
     }
     // Otherwise, mark item as selected and show its context menu
-    this.props.menubar.setState({selectedLabel: this.props.label})
+    windowActions.setMenubarItemSelected(this.props.label)
     const rect = e.target.getBoundingClientRect()
     windowActions.setContextMenuDetail(Immutable.fromJS({
       left: rect.left,
@@ -36,7 +37,7 @@ class MenubarItem extends ImmutableComponent {
           return submenuItem
         }
         submenuItem.click = function (e) {
-          windowActions.clickMenubarItem(submenuItem.label)
+          windowActions.clickMenubarSubmenu(submenuItem.label)
         }
         return submenuItem
       })
@@ -44,7 +45,7 @@ class MenubarItem extends ImmutableComponent {
   }
 
   onMouseOver (e) {
-    const selected = this.props.menubar.state.selectedLabel
+    const selected = this.props.menubar.props.selectedLabel
     if (selected && selected !== this.props.label) {
       this.onClick(e)
     }
@@ -66,19 +67,9 @@ class MenubarItem extends ImmutableComponent {
  * NOTE: the system menu is still created and used in order to keep the accelerators working.
  */
 class Menubar extends ImmutableComponent {
-  constructor () {
-    super()
-    this.state = {
-      selectedLabel: null
-    }
-  }
-
   shouldComponentUpdate (nextProps, nextState) {
-    return this.state.selectedLabel !== nextState.selectedLabel
+    return this.props.selectedLabel !== nextProps.selectedLabel
   }
-
-  // TODO: this needs to clear its state every time a context menu is closed
-  // selected label would need to be in windowState for this to work
 
   render () {
     return <div className='menubar'>
@@ -89,7 +80,7 @@ class Menubar extends ImmutableComponent {
           submenu: menubarItem.get('submenu').toJS(),
           menubar: this
         }
-        if (props.label === this.state.selectedLabel) {
+        if (props.label === this.props.selectedLabel) {
           props.selected = true
         }
         return <MenubarItem {...props} />

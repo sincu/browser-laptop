@@ -596,24 +596,26 @@ class Main extends ImmutableComponent {
   }
 
   onMouseDown (e) {
+    // BSCTODO: update this to use eventUtil.eventElHasAncestorWithClasses
     let node = e.target
     while (node) {
       if (node.classList &&
           (node.classList.contains('popupWindow') ||
             node.classList.contains('contextMenu') ||
-            node.classList.contains('extensionButton'))) {
+            node.classList.contains('extensionButton') ||
+            node.classList.contains('menubarItem'))) {
         // Middle click (on context menu) needs to fire the click event.
         // We need to prevent the default "Auto-Scrolling" behavior.
         if (node.classList.contains('contextMenu') && e.button === 1) {
           e.preventDefault()
         }
+        // Click event is handled downstream
         return
       }
       node = node.parentNode
     }
-    // TODO(bridiver) combine context menu and popup window
-    windowActions.setContextMenuDetail()
-    windowActions.setPopupWindowDetail()
+    // Hide context menus, popup menus, and menu selections
+    windowActions.resetMenuState()
   }
 
   onClickWindow (e) {
@@ -750,6 +752,7 @@ class Main extends ImmutableComponent {
     const menubarEnabled = isWindows
     const menubarVisible = menubarEnabled && (!getSetting(settings.AUTO_HIDE_MENU) || this.props.windowState.getIn(['ui', 'menubar', 'isVisible']))
     const menubarTemplate = menubarVisible ? this.props.appState.getIn(['menu', 'template']) : null
+    const menubarSelectedLabel = this.props.windowState.getIn(['ui', 'menubar', 'selectedLabel'])
 
     const shouldAllowWindowDrag = !this.props.windowState.get('contextMenuDetail') &&
       !this.props.windowState.get('bookmarkDetail') &&
@@ -789,7 +792,7 @@ class Main extends ImmutableComponent {
               {
                 menubarVisible
                   ? <div className='menubarContainer'>
-                    <Menubar template={menubarTemplate} />
+                    <Menubar template={menubarTemplate} selectedLabel={menubarSelectedLabel} />
                   </div>
                   : null
               }
