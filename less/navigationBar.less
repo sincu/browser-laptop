@@ -29,6 +29,11 @@
                  - (@navbarBraveButtonWidth + 2 * @navbarButtonSpacing);
 }
 
+// On Windows, we add extra padding to have spacing match the close button
+.platform--win32 .navigatorWrapper .backforward {
+  margin-left: @navbarLeftMarginWindows;
+}
+
 // Style adjustments needed for slim titlebar to work properly
 .navbarCaptionButtonContainer {
   display: flex;
