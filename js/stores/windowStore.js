@@ -774,8 +774,11 @@ const doAction = (action) => {
       }
       break
     case WindowConstants.WINDOW_TOGGLE_MENUBAR_VISIBLE:
+      // Close existing context menus
+      windowState = windowState.delete('contextMenuDetail')
+      // Use value if provided; if not, toggle to opposite.
       if (getSetting(settings.AUTO_HIDE_MENU)) {
-        if (typeof action.isVisible === 'boolean'){
+        if (typeof action.isVisible === 'boolean') {
           windowState = windowState.setIn(['ui', 'menubar', 'isVisible'], action.isVisible)
         } else {
           const currentStatus = windowState.getIn(['ui', 'menubar', 'isVisible'])
