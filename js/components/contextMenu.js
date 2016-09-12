@@ -24,6 +24,15 @@ class ContextMenuItem extends ImmutableComponent {
   get hasSubmenu () {
     return this.submenu && this.submenu.size > 0
   }
+  get accelerator () {
+    const accelerator = this.props.contextMenuItem.get('accelerator')
+    return accelerator && typeof accelerator === 'string'
+      ? accelerator.trim()
+      : null
+  }
+  get hasAccelerator () {
+    return this.accelerator !== null
+  }
   onClick (clickAction, shouldHide, e) {
     e.stopPropagation()
     if (clickAction) {
@@ -101,6 +110,60 @@ class ContextMenuItem extends ImmutableComponent {
     }
     return ''
   }
+
+  // BSCTODO: break this out to a utility class & cleanup
+  // see https://github.com/electron/electron/blob/master/docs/api/accelerator.md
+  formatAccelerator (accelerator) {
+    let result = accelerator
+    let splitResult = accelerator.split('+')
+    // sort in proper order, based on OS
+    // also, replace w/ name or symbol
+    if (process.platform === 'darwin') {
+      function orderLookup(value) {
+        switch(value) {
+          case 'Alt':
+          case 'Option':
+          case 'AltGr':
+          case 'Super':
+            return 0;
+          case 'Shift':
+            return 1;
+          case 'CmdOrCtrl':
+          case 'Control':
+          case 'Command':
+            return 2;
+          default: return 3;
+        }
+        splitResult.sort(function (left, right) {
+          if (left === right) return 0
+          if (orderLookup(left) > orderLookup(right)) return 1
+          return -1
+        })
+        result = splitResult.join('')
+        result = result.replace('CmdOrCtrl', '⌘')
+        result = result.replace('Alt', '⌥')
+        result = result.replace('Option', '⌥')
+        result = result.replace('Super', '⌘')
+      }
+    } else {
+      function orderLookup(value) {
+        switch(value) {
+          case 'CmdOrCtrl': return 0;
+          case 'Alt': return 1;
+          case 'Shift': return 2;
+          default: return 3;
+        }
+      }
+      splitResult.sort(function (left, right) {
+        if (left === right) return 0
+        if (orderLookup(left) > orderLookup(right)) return 1
+        return -1
+      })
+      result = splitResult.join('+')
+      result = result.replace('CmdOrCtrl', 'Ctrl')
+    }
+    return result
+  }
   render () {
     const iconSize = 16
     let iconStyle = {
@@ -177,7 +240,12 @@ class ContextMenuItem extends ImmutableComponent {
           <span className='submenuIndicatorSpacer' />
           <span className='submenuIndicator fa fa-chevron-right' />
         </span>
-        : null
+        : this.hasAccelerator
+          ? <span className='submenuIndicatorContainer'>
+              <span className='submenuIndicatorSpacer' />
+              <span className='submenuIndicator'>{this.formatAccelerator(this.accelerator)}</span>
+            </span>
+          : null
       }
     </div>
   }
