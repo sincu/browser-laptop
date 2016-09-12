@@ -28,7 +28,7 @@ class ContextMenuItem extends ImmutableComponent {
     e.stopPropagation()
     if (clickAction) {
       if (shouldHide) {
-        windowActions.setContextMenuDetail()
+        windowActions.resetMenuState()
       }
       clickAction(e)
     }
